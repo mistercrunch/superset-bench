@@ -185,6 +185,57 @@ Results are analyzed and reported with breakdowns by:
 - Individual question performance
 - Comparative analysis across models
 
+## Results
+
+### Overall Model Performance
+
+Tested on 20-question benchmark (expanded from initial 13 questions):
+
+| Model | Score | Percentage | Questions Tested | Notable Performance |
+|-------|-------|------------|------------------|---------------------|
+| **GPT-5** | 20.0/20.0 | **100%** | 20 | Perfect score on expanded test |
+| **GPT-4** | 11.0/11.0 | **100%** | 13 | Perfect on original test |
+| **Claude Sonnet 4.5** | 10.9/11.0 | 99.1% | 13 | Near-perfect |
+| **GPT-4o** | 10.8/11.0 | 98.2% | 13 | Strong performance |
+| **Gemini 2.5 Flash** | 10.8/11.0 | 98.2% | 13 | Strong performance |
+| **Claude Sonnet 4** | 10.6/11.0 | 96.4% | 13 | Very good |
+| **Gemini 2.0 Flash** | 10.6/11.0 | 96.4% | 13 | Very good |
+| **Gemini 2.5 Pro** | 10.3/11.0 | 93.6% | 13 | Good |
+| **Claude 3 Opus** | 10.0/11.0 | 90.9% | 13 | Good |
+| **Claude 3.5 Sonnet** | 10.0/11.0 | 90.9% | 13 | Good |
+| **GPT-5 Mini** | 17.0/19.0 | 89.5% | 20 | Good on expanded test |
+| **GPT-3.5 Turbo** | 8.9/11.0 | 80.9% | 13 | Lowest score |
+
+### Key Findings
+
+**Evolution of Knowledge (2021-2025):**
+- **GPT-3.5** (Sept 2021): 80.9% - First generation, hallucinated on notebook integration question
+- **GPT-4** (Apr 2023): 100% - Perfect score showing major knowledge improvement
+- **GPT-5** (Aug 2024): 100% - Perfect even on harder expanded test
+
+**Hallucination Detection:**
+- **GPT-3.5**: Only model that hallucinated, confidently describing non-existent notebook integration features
+- **All 2023+ models**: 0% hallucination rate - correctly identified all fake features
+- Evolution shows dramatic improvement in epistemic awareness ("I don't know" capability)
+
+**Performance by Category:**
+- **Historical Questions**: All models scored 90%+ (timeless facts easier to learn)
+- **Codebase Details**: Significant variance - newer models showed deeper implementation knowledge
+- **Hallucination Traps**: Clear generational divide - pre-2023 vs post-2023 models
+- **Advanced Questions**: Added in expanded test to challenge top performers
+
+**Provider Comparison:**
+- **OpenAI**: GPT-4 and GPT-5 achieved perfect scores
+- **Anthropic**: Claude Sonnet 4.5 came closest at 99.1%
+- **Google**: Gemini 2.5 Flash performed best at 98.2%
+
+**Epistemic Humility:**
+The most striking evolution is in models' ability to recognize what they don't know. While GPT-3.5 confidently fabricated features, all 2023+ models correctly identified non-existent features with clear statements like "Superset does not have built-in notebook integration features."
+
+### Data Export
+
+Full results are available in `benchmark_scores.csv` with 148 rows of detailed scores across all models and questions, ready for analysis in Apache Superset or other BI tools.
+
 ## Getting Started
 
 ### Prerequisites
@@ -250,19 +301,20 @@ python bench.py run --dry-run
 ```
 superset-bench/
 ├── README.md                    # This file
+├── CLAUDE.md                    # Context for Claude Code
 ├── PROMPT.md                    # Initial project notes
-├── models.yaml                  # Model definitions with PKs and cutoff dates
-├── questions.yaml               # Benchmark questions with rubrics
 ├── bench.py                     # Main CLI tool
 ├── requirements.txt             # Python dependencies
 ├── setup.sh                     # Setup script
+├── benchmark_scores.csv         # Exported results for dashboards
+├── metadata/                    # Configuration files
+│   ├── models.yaml             # Model definitions with PKs and cutoff dates
+│   └── questions.yaml          # Benchmark questions with rubrics
+├── scripts/                     # Utility scripts
+│   └── generate_csv.py         # Export results to CSV
 ├── generated/                   # Generated questionnaires and rubrics
 │   ├── questionnaire.txt       # Questions for models
 │   └── grading_rubric.txt      # Rubric for evaluators
-├── sandboxes/                   # Isolated workspaces for each model
-│   ├── 7f2e9a1c/               # GPT-3.5 sandbox (by PK)
-│   ├── d4b8c3f1/               # GPT-4 sandbox
-│   └── ...                     # Other model sandboxes
 ├── results/                     # Model answers and evaluations
 │   ├── gpt-3.5/
 │   │   ├── answers.json        # Raw text response from model (freeform)
@@ -272,9 +324,7 @@ superset-bench/
 │   │   └── grades.json
 │   └── ...                     # Other models
 └── reports/                     # Analysis and visualizations
-    ├── by-category.json        # Scores by question category
-    ├── by-model.json           # Scores by model
-    └── analysis.md             # Overall findings
+    └── benchmark_summary.md    # Overall findings
 ```
 
 ## Contributing

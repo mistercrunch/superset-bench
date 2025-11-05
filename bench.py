@@ -31,6 +31,11 @@ def load_yaml(file_path: Path) -> dict:
         return yaml.safe_load(f)
 
 
+def get_metadata_path(filename: str) -> Path:
+    """Get path to metadata file."""
+    return Path('metadata') / filename
+
+
 @app.command()
 def generate(
     output_dir: Path = typer.Option(Path("generated"), help="Output directory"),
@@ -44,7 +49,7 @@ def generate(
     ))
 
     # Load questions
-    questions_data = load_yaml(Path('questions.yaml'))
+    questions_data = load_yaml(get_metadata_path('questions.yaml'))
 
     # Create output directory
     output_dir.mkdir(exist_ok=True)
@@ -112,7 +117,7 @@ def models():
         border_style="cyan"
     ))
 
-    models_data = load_yaml(Path('models.yaml'))
+    models_data = load_yaml(get_metadata_path('models.yaml'))
 
     table = Table(box=box.ROUNDED)
     table.add_column("ID", style="cyan")
@@ -155,8 +160,8 @@ def run(
         raise typer.Exit(1)
 
     # Load data
-    questions_data = load_yaml(Path('questions.yaml'))
-    models_data = load_yaml(Path('models.yaml'))
+    questions_data = load_yaml(get_metadata_path('questions.yaml'))
+    models_data = load_yaml(get_metadata_path('models.yaml'))
 
     # Create prompt
     questions = questions_data['questions']

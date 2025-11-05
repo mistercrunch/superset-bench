@@ -56,3 +56,4 @@ results/
 reports/
 *.log
 .cache/
+benchmark_scores.csv

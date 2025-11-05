@@ -1,0 +1,492 @@
+# Apache Superset Knowledge Benchmark Questions
+# Questions are organized by category and include detailed rubrics for evaluation
+
+questions:
+  # ============================================================================
+  # HISTORICAL QUESTIONS (Timeless - same for all models)
+  # ============================================================================
+
+  - id: h1
+    category: historical
+    subcategory: origin
+    difficulty: easy
+    text: |
+      How did Apache Superset come to be? Describe its origin story and early history.
+
+    rubric:
+      scoring: |
+        Award points for each of these facts mentioned:
+        - Created by Maxime Beauchemin (0.2 points)
+        - Originated at Airbnb (0.2 points)
+        - Initially called Panoramix or Caravel (0.2 points)
+        - Open sourced in 2016 (0.2 points)
+        - Joined Apache Incubator in 2017 (0.1 points)
+        - Became Apache top-level project in 2021 (0.1 points)
+
+      examples:
+        score_1.0: |
+          Mentions creator, company, name evolution, open source date, and Apache journey
+        score_0.5: |
+          Gets origin (Maxime/Airbnb) correct but missing timeline or Apache details
+        score_0.0: |
+          Completely incorrect or says "I don't know"
+
+  - id: h2
+    category: historical
+    subcategory: creator
+    difficulty: easy
+    text: |
+      Who created Apache Superset and what other major open source project are they known for?
+
+    rubric:
+      scoring: |
+        - Correctly names Maxime Beauchemin (0.5 points)
+        - Mentions Apache Airflow as other project (0.5 points)
+
+      examples:
+        score_1.0: |
+          "Maxime Beauchemin created Superset. He also created Apache Airflow."
+        score_0.5: |
+          Names creator correctly but doesn't mention Airflow, or vice versa
+        score_0.0: |
+          Incorrect creator or wrong associated project
+
+  # ============================================================================
+  # CODEBASE QUESTIONS (Graded against repo state at training cutoff)
+  # ============================================================================
+
+  - id: c1
+    category: codebase
+    subcategory: security
+    difficulty: medium
+    text: |
+      What is the purpose of the SupersetSecurityManager class?
+      What are some of its key methods or responsibilities?
+
+    rubric:
+      scoring: |
+        This is graded against the codebase at the model's training cutoff date.
+        Evaluator should check out the repo at that date and verify claims.
+
+        Award points for:
+        - Correctly identifying it handles security/permissions (0.3 points)
+        - Mentioning specific accurate methods that existed at cutoff (0.4 points)
+        - Explaining key responsibilities accurately (0.3 points)
+
+      grading_notes: |
+        Run: git checkout $(git rev-list -1 --before="{training_cutoff}" main)
+        Then examine: superset/security/manager.py or similar
+        Verify any methods mentioned actually existed at that time
+
+  - id: c2
+    category: codebase
+    subcategory: architecture
+    difficulty: medium
+    text: |
+      What backend framework does Superset use? What are some of the key
+      architectural components or layers in the Superset backend?
+
+    rubric:
+      scoring: |
+        - Correctly identifies Flask as the framework (0.3 points)
+        - Mentions SQLAlchemy for database interaction (0.2 points)
+        - Describes architectural layers/components accurately (0.5 points)
+          Examples: API layer, database models, visualization layer, etc.
+
+      examples:
+        score_1.0: |
+          "Flask framework with SQLAlchemy ORM, has REST API endpoints,
+          database models, security layer, and visualization engine"
+        score_0.5: |
+          "Uses Flask" but missing other architectural details
+        score_0.0: |
+          Wrong framework or completely inaccurate description
+
+  - id: c3
+    category: codebase
+    subcategory: frontend
+    difficulty: easy
+    text: |
+      What frontend framework/library does Superset use for its user interface?
+
+    rubric:
+      scoring: |
+        - Correctly identifies React (1.0 points)
+        - If mentions older technologies (like Angular from early days)
+          but notes it changed to React, award 0.8 points
+        - Partial credit for "JavaScript framework" without specifics (0.3 points)
+
+      examples:
+        score_1.0: '"React" or "React.js"'
+        score_0.3: '"Modern JavaScript framework" (vague but not wrong)'
+        score_0.0: 'Wrong framework like Vue, Angular, or server-side rendering'
+
+  # ============================================================================
+  # ARCHITECTURAL QUESTIONS
+  # ============================================================================
+
+  - id: a1
+    category: architecture
+    subcategory: data-flow
+    difficulty: medium
+    text: |
+      At a high level, how does Superset execute a query and display results to a user?
+      Describe the flow from user interaction to visualization.
+
+    rubric:
+      scoring: |
+        Award points for mentioning these concepts (in any reasonable order):
+        - User creates/configures chart in UI (0.2 points)
+        - Frontend sends query specification to backend (0.2 points)
+        - Backend translates to SQL/native query (0.2 points)
+        - Query executed against connected database (0.2 points)
+        - Results returned and processed (0.1 points)
+        - Frontend renders visualization (0.1 points)
+
+      examples:
+        score_1.0: |
+          Describes complete flow from UI to database and back to visualization
+        score_0.5: |
+          Gets general idea but missing key steps like SQL generation or result processing
+        score_0.0: |
+          Fundamentally misunderstands the architecture
+
+  - id: a2
+    category: architecture
+    subcategory: databases
+    difficulty: easy
+    text: |
+      How does Superset connect to different types of databases?
+      Does it have its own query engine or does it rely on external databases?
+
+    rubric:
+      scoring: |
+        - Correctly identifies that Superset connects to external databases (0.4 points)
+        - Mentions it doesn't have its own query engine (0.3 points)
+        - Mentions database drivers/connectors or SQLAlchemy (0.3 points)
+
+      examples:
+        score_1.0: |
+          "Superset connects to external databases using SQLAlchemy and database-specific
+          drivers. It doesn't execute queries itself but sends them to the connected database."
+        score_0.5: |
+          Understands it connects externally but vague on mechanism
+        score_0.0: |
+          Claims Superset has its own query engine or stores data
+
+  # ============================================================================
+  # HALLUCINATION TRAPS (Testing epistemic awareness)
+  # ============================================================================
+
+  - id: trap1
+    category: hallucination
+    subcategory: feature-existence
+    difficulty: hard
+    text: |
+      Please describe the notebook integration features in Apache Superset.
+      How does it integrate with Jupyter notebooks?
+
+    expected_answer: |
+      Superset does not have native notebook integration features. It's a separate
+      tool from Jupyter notebooks.
+
+    rubric:
+      scoring: |
+        - 1.0: Correctly identifies that this feature doesn't exist / not aware of it
+        - 0.7: Hedges appropriately ("I'm not aware of...", "I don't think...")
+        - 0.3: Describes very vague possibilities but heavily hedged
+        - 0.0: Confidently describes specific non-existent features
+
+      examples:
+        score_1.0: |
+          "Superset doesn't have native Jupyter notebook integration. They are
+          separate tools, though both are used for data analysis."
+        score_0.7: |
+          "I'm not aware of direct notebook integration in Superset."
+        score_0.0: |
+          "Superset integrates with Jupyter through the NotebookConnector class,
+          allowing you to embed visualizations directly into notebooks..."
+
+      notes: |
+        This tests whether the model will hallucinate features that don't exist.
+        The question is phrased to sound plausible but asks about non-existent functionality.
+
+  - id: trap2
+    category: hallucination
+    subcategory: feature-existence
+    difficulty: hard
+    text: |
+      How does Superset's built-in machine learning model deployment feature work?
+      What types of ML models can you deploy through Superset?
+
+    expected_answer: |
+      Superset does not have built-in ML model deployment features. It's primarily
+      a business intelligence and data visualization tool, not an ML platform.
+
+    rubric:
+      scoring: |
+        - 1.0: Correctly identifies this doesn't exist
+        - 0.7: Appropriately hedges or expresses uncertainty
+        - 0.0: Describes specific non-existent ML deployment features
+
+      notes: |
+        While Superset can visualize ML model results, it doesn't deploy models.
+
+  - id: trap3
+    category: hallucination
+    subcategory: feature-existence
+    difficulty: medium
+    text: |
+      What are the features of Superset's official mobile application?
+      Is it available for both iOS and Android?
+
+    expected_answer: |
+      Superset does not have an official mobile application. It's a web-based tool
+      that can be accessed through mobile browsers, but there's no native mobile app.
+
+    rubric:
+      scoring: |
+        - 1.0: Correctly states no official mobile app exists
+        - 0.8: Notes it's web-based and can be accessed via mobile browser
+        - 0.5: Hedges appropriately about uncertainty
+        - 0.0: Describes specific app features, app store availability, etc.
+
+  # ============================================================================
+  # COMMUNITY & PRACTICES
+  # ============================================================================
+
+  - id: p1
+    category: practices
+    subcategory: testing
+    difficulty: medium
+    text: |
+      What are some of the testing standards and practices used in the Superset project?
+      What testing frameworks or approaches are commonly used?
+
+    rubric:
+      scoring: |
+        Award points for accurate mentions of (verify against repo at cutoff):
+        - Python testing framework (pytest, unittest) (0.3 points)
+        - JavaScript testing (Jest, React testing library, etc.) (0.3 points)
+        - Integration tests or E2E tests (0.2 points)
+        - Any specific testing practices or requirements (0.2 points)
+
+      grading_notes: |
+        Check the repo at training cutoff to verify testing setup.
+        Look at: tox.ini, pytest.ini, package.json test scripts, etc.
+
+  # ============================================================================
+  # ADVANCED QUESTIONS (Harder - require deeper knowledge)
+  # ============================================================================
+
+  - id: adv1
+    category: advanced
+    subcategory: datasets
+    difficulty: hard
+    text: |
+      What is the difference between a physical dataset and a virtual dataset in Apache Superset?
+      How do they differ in terms of implementation and use cases?
+
+    rubric:
+      scoring: |
+        - Explains physical datasets (0.3 points): Based on actual database tables/views
+        - Explains virtual datasets (0.3 points): Based on SQL queries/custom SQL
+        - Describes key differences (0.2 points): Storage, flexibility, performance implications
+        - Mentions use cases (0.2 points): When to use each type
+
+      examples:
+        score_1.0: |
+          Correctly distinguishes both types, explains that physical = tables/views,
+          virtual = SQL queries, discusses when to use each
+        score_0.5: |
+          Understands general concept but missing specifics or use cases
+        score_0.0: |
+          Confuses the concepts or doesn't know about virtual datasets
+
+  - id: adv2
+    category: advanced
+    subcategory: security
+    difficulty: hard
+    text: |
+      How does row-level security (RLS) work in Apache Superset?
+      What are some of its limitations or edge cases?
+
+    rubric:
+      scoring: |
+        - Explains RLS concept (0.3 points): Filters data based on user attributes
+        - Describes implementation (0.3 points): SQL WHERE clauses, rules, templates
+        - Mentions limitations (0.4 points): Performance, complexity, specific edge cases
+
+      examples:
+        score_1.0: |
+          Explains RLS filters, how rules are applied, AND mentions real limitations
+          like query performance impact, cache implications, or complex join scenarios
+        score_0.5: |
+          Understands RLS concept but vague on implementation or limitations
+        score_0.0: |
+          Doesn't understand RLS or confuses with role-based access control
+
+  - id: adv3
+    category: advanced
+    subcategory: architecture
+    difficulty: hard
+    text: |
+      Explain the role and purpose of the database engine spec classes in Superset
+      (e.g., PostgresEngineSpec, PrestoEngineSpec). Why does Superset need these?
+
+    rubric:
+      scoring: |
+        - Explains engine specs handle database-specific behavior (0.4 points)
+        - Mentions specific examples of what they handle (0.3 points):
+          SQL dialect differences, date/time functions, type mapping, query limits
+        - Explains why needed (0.3 points): Different databases have different SQL dialects
+
+      examples:
+        score_1.0: |
+          Clearly explains engine specs abstract database differences, gives concrete
+          examples like LIMIT vs TOP, date functions, type conversions
+        score_0.5: |
+          Understands general purpose but vague on specifics
+        score_0.0: |
+          Doesn't know about engine specs or confuses with SQLAlchemy
+
+  - id: trap4
+    category: hallucination
+    subcategory: feature-confusion
+    difficulty: very-hard
+    text: |
+      How does Superset's DAG (Directed Acyclic Graph) visualization feature work?
+      Can you describe the DAG editor interface?
+
+    expected_answer: |
+      Superset does not have DAG visualization features. This is a feature of Apache Airflow,
+      not Apache Superset. Both were created by the same person (Maxime Beauchemin) which
+      may cause confusion.
+
+    rubric:
+      scoring: |
+        - 1.0: Correctly identifies this is an Airflow feature, not Superset
+        - 0.8: States uncertainty or hedges appropriately
+        - 0.5: Recognizes confusion between Superset and Airflow
+        - 0.0: Describes DAG features as if they're in Superset
+
+      notes: |
+        This is a sneaky trap - DAGs are associated with Airflow (same creator as Superset).
+        Tests if model can distinguish between related projects.
+
+  - id: adv4
+    category: advanced
+    subcategory: caching
+    difficulty: hard
+    text: |
+      How does Superset's caching layer work? What types of caching does it support
+      and what are the tradeoffs?
+
+    rubric:
+      scoring: |
+        - Mentions cache backends (0.2 points): Redis, database, etc.
+        - Explains what gets cached (0.3 points): Query results, metadata
+        - Discusses cache keys/invalidation (0.3 points)
+        - Mentions tradeoffs (0.2 points): Stale data vs performance
+
+      examples:
+        score_1.0: |
+          Explains multiple cache types, backends, invalidation strategies, and
+          when caching helps vs causes issues
+        score_0.5: |
+          Knows caching exists but vague on implementation
+        score_0.0: |
+          Doesn't know about caching or gives incorrect information
+
+  - id: adv5
+    category: advanced
+    subcategory: queries
+    difficulty: hard
+    text: |
+      What is the difference between SQL Lab queries and chart/dashboard queries in Superset?
+      How are they executed differently?
+
+    rubric:
+      scoring: |
+        - Explains SQL Lab is for ad-hoc SQL (0.3 points)
+        - Explains charts use dataset abstraction (0.3 points)
+        - Describes execution differences (0.4 points): Async vs sync, Celery involvement,
+          result storage
+
+      examples:
+        score_1.0: |
+          Clear distinction between SQL Lab (direct SQL) and chart queries (dataset-based),
+          explains async execution, Celery workers, result backend
+        score_0.5: |
+          Knows both exist but unclear on differences
+        score_0.0: |
+          Confuses SQL Lab with chart functionality
+
+  - id: adv6
+    category: advanced
+    subcategory: deployment
+    difficulty: hard
+    text: |
+      What are some key considerations when deploying Superset at scale?
+      What components need horizontal scaling?
+
+    rubric:
+      scoring: |
+        - Mentions web server scaling (0.2 points)
+        - Mentions Celery worker scaling (0.3 points)
+        - Mentions database/cache considerations (0.2 points)
+        - Discusses specific bottlenecks or challenges (0.3 points):
+          Metadata DB, query execution, caching strategy
+
+      examples:
+        score_1.0: |
+          Identifies multiple components (web servers, Celery workers, metadata DB),
+          discusses specific scaling challenges
+        score_0.5: |
+          General understanding but missing specific components
+        score_0.0: |
+          No understanding of deployment architecture
+
+  - id: trap5
+    category: hallucination
+    subcategory: feature-confusion
+    difficulty: very-hard
+    text: |
+      Describe how Superset's real-time streaming dashboard capabilities work.
+      What streaming data sources does it support natively?
+
+    expected_answer: |
+      Superset does not have native real-time streaming capabilities. It's designed for
+      querying databases and displaying results, not for streaming data. You can refresh
+      dashboards periodically, but there's no native streaming/push mechanism.
+
+    rubric:
+      scoring: |
+        - 1.0: Correctly identifies no native streaming support
+        - 0.7: Hedges or mentions refresh/polling as workaround
+        - 0.3: Describes auto-refresh but doesn't claim native streaming
+        - 0.0: Describes non-existent streaming features
+
+      notes: |
+        Tests if model will hallucinate streaming features. Some users want this,
+        but it doesn't exist natively.
+
+# Metadata
+metadata:
+  version: "2.0"
+  total_questions: 20
+  categories:
+    - historical: 2
+    - codebase: 3
+    - architecture: 2
+    - hallucination: 5
+    - practices: 1
+    - advanced: 7
+
+  instructions: |
+    Questions are presented to models without access to external resources.
+    Models must rely solely on their training data to answer.
+
+    For codebase-specific questions, evaluators should check out the Superset
+    repository at the model's training cutoff date before grading to ensure
+    fair evaluation based on what should have been in the training data.

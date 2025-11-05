@@ -1,0 +1,131 @@
+# Models to be evaluated in the Apache Superset Knowledge Benchmark
+# Each model has a unique PK for sandboxing and a human-readable ID for reporting
+#
+# Model IDs verified against OpenRouter API: https://openrouter.ai/api/v1/models
+
+models:
+  - pk: 7f2e9a1c
+    id: gpt-3.5
+    name: GPT-3.5 Turbo
+    provider: OpenAI
+    training_cutoff: 2021-09-01
+    openrouter_id: openai/gpt-3.5-turbo
+    notes: First generation baseline
+
+  - pk: d4b8c3f1
+    id: gpt-4
+    name: GPT-4
+    provider: OpenAI
+    training_cutoff: 2023-04-01
+    openrouter_id: openai/gpt-4
+    notes: Major capability jump from GPT-3.5
+
+  - pk: a1e5d9b2
+    id: gpt-4o
+    name: GPT-4o
+    provider: OpenAI
+    training_cutoff: 2023-10-01
+    openrouter_id: openai/gpt-4o
+    notes: Optimized version with extended cutoff
+
+  - pk: 6c3f8e4d
+    id: claude-3-opus
+    name: Claude 3 Opus
+    provider: Anthropic
+    training_cutoff: 2023-08-01
+    openrouter_id: anthropic/claude-3-opus
+    notes: Most capable Claude 3 model
+
+  - pk: 9b2d7a5e
+    id: claude-3.5-sonnet
+    name: Claude 3.5 Sonnet
+    provider: Anthropic
+    training_cutoff: 2024-04-01
+    openrouter_id: anthropic/claude-3.5-sonnet
+    notes: First Claude 3.5 release
+
+  - pk: e8f1c6a3
+    id: claude-3.5-sonnet-v2
+    name: Claude 3.5 Sonnet (2024-06-20)
+    provider: Anthropic
+    training_cutoff: 2024-06-20
+    openrouter_id: anthropic/claude-3.5-sonnet-20240620
+    notes: Updated Claude 3.5 with improved capabilities
+
+  - pk: 3a7c2f9b
+    id: claude-sonnet-4
+    name: Claude Sonnet 4
+    provider: Anthropic
+    training_cutoff: 2025-03-01
+    openrouter_id: anthropic/claude-sonnet-4
+    notes: Major leap to Claude 4 generation
+
+  - pk: 5d9e4b1f
+    id: claude-sonnet-4.5
+    name: Claude Sonnet 4.5
+    provider: Anthropic
+    training_cutoff: 2025-01-01
+    openrouter_id: anthropic/claude-sonnet-4.5
+    notes: Latest Claude model - reliable knowledge through Jan 2025
+
+  - pk: c2a6f8d4
+    id: gemini-2.0-flash
+    name: Gemini 2.0 Flash
+    provider: Google
+    training_cutoff: 2024-11-01
+    openrouter_id: google/gemini-2.0-flash-001
+    notes: Fast, efficient Gemini model
+
+  - pk: b7e3d1a9
+    id: gemini-2.5-flash
+    name: Gemini 2.5 Flash
+    provider: Google
+    training_cutoff: 2025-01-01
+    openrouter_id: google/gemini-2.5-flash
+    notes: Latest flash model with most recent cutoff
+
+  - pk: f4c9e2b6
+    id: gemini-2.5-pro
+    name: Gemini 2.5 Pro
+    provider: Google
+    training_cutoff: 2025-01-01
+    openrouter_id: google/gemini-2.5-pro
+    notes: Most capable Gemini model tested
+
+  - pk: a8f3e1d7
+    id: gpt-5
+    name: GPT-5
+    provider: OpenAI
+    training_cutoff: 2024-08-01
+    openrouter_id: openai/gpt-5
+    notes: Latest GPT-5 base model
+
+  - pk: c9b2f4e6
+    id: gpt-5-pro
+    name: GPT-5 Pro
+    provider: OpenAI
+    training_cutoff: 2024-08-01
+    openrouter_id: openai/gpt-5-pro
+    notes: GPT-5 Pro variant
+
+  - pk: e1d7a3f9
+    id: gpt-5-mini
+    name: GPT-5 Mini
+    provider: OpenAI
+    training_cutoff: 2024-08-01
+    openrouter_id: openai/gpt-5-mini
+    notes: Smaller GPT-5 variant
+
+# Instructions for grading (used by evaluator agents)
+grading_instructions:
+  checkout_command: git checkout $(git rev-list -1 --before="{training_cutoff}" main)
+  description: >
+    For each model, checkout the Superset repository at their training cutoff date
+    before grading their answers. This ensures fair evaluation based on what should
+    have been in their training data.
+
+# Sandbox configuration
+sandbox_instructions:
+  description: Each model operates in an isolated sandbox directory named by its PK
+  path_template: sandboxes/{pk}/
+  purpose: Prevents cross-contamination between model test sessions and allows parallel execution

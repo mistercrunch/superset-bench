@@ -9,7 +9,8 @@ A benchmark designed to measure how much various language models know about Apac
 | Model | Provider | Training Cutoff | Score | Percentage | Status |
 |-------|----------|----------------|-------|------------|--------|
 | Claude Sonnet 4 | Anthropic | 2025-03-01 | 17.3/19 | 91.3% | 🥉 Strong |
-| Claude Sonnet 4.5 | Anthropic | 2025-01-01 | 18.0/19 | 95.0% | 🥈 Excellent |
+| Claude Opus 4.1 | Anthropic | 2025-02-01 | 18.3/19 | 96.3% | 🥈 Excellent |
+| Claude Sonnet 4.5 | Anthropic | 2025-01-01 | 18.0/19 | 95.0% | 🥉 Strong |
 | Gemini 2.5 Pro | Google | 2025-01-01 | 18.7/19 | 98.7% | 🥈 Excellent |
 | Gemini 2.5 Flash | Google | 2025-01-01 | 19.0/19 | 100.0% | 🥇 Perfect |
 | Gemini 2.0 Flash | Google | 2024-11-01 | 19.0/19 | 100.0% | 🥇 Perfect |

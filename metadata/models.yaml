@@ -68,6 +68,14 @@ models:
     openrouter_id: anthropic/claude-sonnet-4.5
     notes: Latest Claude model - reliable knowledge through Jan 2025
 
+  - pk: 7b8f3c2d
+    id: claude-opus-4.1
+    name: Claude Opus 4.1
+    provider: Anthropic
+    training_cutoff: 2025-02-01
+    openrouter_id: anthropic/claude-opus-4.1
+    notes: Most capable Claude 4 generation model
+
   - pk: c2a6f8d4
     id: gemini-2.0-flash
     name: Gemini 2.0 Flash

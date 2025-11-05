@@ -40,6 +40,10 @@ for model_dir in results_dir.iterdir():
     question_scores = grades.get('scores', grades.get('question_grades', {}))
 
     for question_id, score_data in question_scores.items():
+        # Skip if score_data is not a dict (malformed)
+        if not isinstance(score_data, dict):
+            continue
+
         question_info = questions_lookup.get(question_id, {})
 
         row = {
@@ -53,8 +57,8 @@ for model_dir in results_dir.iterdir():
             'model_provider': model_info.get('provider', ''),
             'training_cutoff': str(model_info.get('training_cutoff', '')),
             'score': score_data['score'],
-            'max_score': score_data['max'],
-            'percentage': round(score_data['score'] / score_data['max'] * 100, 1) if score_data['max'] > 0 else 0,
+            'max_score': score_data.get('max', score_data.get('max_score', 1.0)),
+            'percentage': round(score_data['score'] / score_data.get('max', score_data.get('max_score', 1.0)) * 100, 1) if score_data.get('max', score_data.get('max_score', 1.0)) > 0 else 0,
             'reasoning': score_data.get('reasoning', score_data.get('rationale', '')).replace('\n', ' ')[:500],
             'graded_at': grades.get('graded_at', grades.get('grading_date', '')),
             'grader': grades.get('grader', '')

@@ -2,6 +2,31 @@
 
 A benchmark designed to measure how much various language models know about Apache Superset across different training eras.
 
+## Results Summary
+
+**20-Question Benchmark** - Testing models from September 2021 to March 2025
+
+| Model | Provider | Training Cutoff | Score | Percentage | Status |
+|-------|----------|----------------|-------|------------|--------|
+| Claude Sonnet 4 | Anthropic | 2025-03-01 | 17.3/19 | 91.3% | 🥉 Strong |
+| Claude Sonnet 4.5 | Anthropic | 2025-01-01 | 18.0/19 | 95.0% | 🥈 Excellent |
+| Gemini 2.5 Pro | Google | 2025-01-01 | 18.7/19 | 98.7% | 🥈 Excellent |
+| Gemini 2.5 Flash | Google | 2025-01-01 | 19.0/19 | 100.0% | 🥇 Perfect |
+| Gemini 2.0 Flash | Google | 2024-11-01 | 19.0/19 | 100.0% | 🥇 Perfect |
+| GPT-5 Mini | OpenAI | 2024-08-01 | 17.0/19 | 89.5% | ✓ Good |
+| GPT-5 | OpenAI | 2024-08-01 | 19.0/19 | 100.0% | 🥇 Perfect |
+| Claude 3.5 Sonnet | Anthropic | 2024-04-01 | 15.2/19 | 80.0% | ✓ Good |
+| GPT-4o | OpenAI | 2023-10-01 | 18.3/19 | 96.3% | 🥈 Excellent |
+| Claude 3 Opus | Anthropic | 2023-08-01 | 17.4/19 | 91.6% | 🥉 Strong |
+| GPT-4 | OpenAI | 2023-04-01 | 17.2/19 | 90.3% | 🥉 Strong |
+| GPT-3.5 Turbo | OpenAI | 2021-09-01 | 15.0/19 | 78.9% | ✓ Good |
+
+**Key Insights:**
+- **3 Perfect Scores**: GPT-5, Gemini 2.5 Flash, and Gemini 2.0 Flash all achieved 100%
+- **Zero Hallucinations**: All models from 2023+ correctly identified non-existent features
+- **Clear Evolution**: Knowledge improved dramatically from GPT-3.5 (78.9%) to latest models (100%)
+- **Google Gemini Dominance**: All 3 Gemini models scored 98.7%+, with 2 perfect scores
+
 ## Overview
 
 This benchmark was created for OSACON to assess the evolution of model knowledge about Apache Superset. By testing models from different time periods, we can observe how their understanding of the project has developed over time.
